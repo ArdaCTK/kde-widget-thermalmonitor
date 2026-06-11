@@ -1,0 +1,14 @@
+{
+    "KPlugin": {
+        "Authors": [{"Email": "", "Name": "Arda"}],
+        "Category": "System Information",
+        "Description": "Real-time CPU and GPU temperature monitor for the taskbar",
+        "Id": "com.arda.thermalmonitor",
+        "License": "MIT",
+        "Name": "Thermal Monitor",
+        "Version": "1.0.0",
+        "Website": "https://github.com/ArdaCTK"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "KPackageStructure": "Plasma/Applet"
+}
