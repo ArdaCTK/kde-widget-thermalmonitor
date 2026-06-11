@@ -187,67 +187,64 @@ PlasmoidItem {
             id: chipRow
             anchors.centerIn: parent
             spacing: compactRoot.gap
+            width: implicitWidth
 
             // ── CPU chip ────────────────────────────────────────────────
-            Item {
+            Rectangle {
+                id: cpuChip
                 visible:        root.cfg_showCpu
-                implicitWidth:  cpuChip.implicitWidth
-                implicitHeight: compactRoot.chipH
+                width:          implicitWidth
+                height:         compactRoot.chipH
+                implicitWidth:  cpuChipRow.implicitWidth + compactRoot.chipPad * 2
+                radius:         height / 2
+                color: Qt.rgba(
+                    Qt.color(root.tempColor(root.cpuTemp)).r,
+                    Qt.color(root.tempColor(root.cpuTemp)).g,
+                    Qt.color(root.tempColor(root.cpuTemp)).b,
+                    0.15)
+                border.color: root.tempColor(root.cpuTemp)
+                border.width: 1
 
+                Behavior on border.color { ColorAnimation { duration: 600 } }
+
+                // Glow effect
                 Rectangle {
-                    id: cpuChip
-                    height: compactRoot.chipH
-                    implicitWidth: cpuChipRow.implicitWidth + compactRoot.chipPad * 2
-                    radius: height / 2
-                    color: Qt.rgba(
-                        Qt.color(root.tempColor(root.cpuTemp)).r,
-                        Qt.color(root.tempColor(root.cpuTemp)).g,
-                        Qt.color(root.tempColor(root.cpuTemp)).b,
-                        0.15)
+                    anchors.fill: parent
+                    radius: parent.radius
+                    color: "transparent"
                     border.color: root.tempColor(root.cpuTemp)
-                    border.width: 1
-
+                    border.width: 3
+                    opacity: 0.15
                     Behavior on border.color { ColorAnimation { duration: 600 } }
+                }
 
-                    // Glow effect
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: parent.radius
-                        color: "transparent"
-                        border.color: root.tempColor(root.cpuTemp)
-                        border.width: 3
-                        opacity: 0.15
-                        Behavior on border.color { ColorAnimation { duration: 600 } }
+                Row {
+                    id: cpuChipRow
+                    anchors.centerIn: parent
+                    spacing: 4
+
+                    Text {
+                        text: "CPU"
+                        color: root.theme.dim
+                        font.pixelSize: root.cfg_fontSize - 2
+                        font.weight: Font.Medium
+                        anchors.verticalCenter: parent.verticalCenter
                     }
+                    Text {
+                        id: cpuTempText
+                        text: root.tempLabel(root.cpuTemp)
+                        color: root.tempColor(root.cpuTemp)
+                        font.pixelSize: root.cfg_fontSize
+                        font.weight: Font.Bold
+                        anchors.verticalCenter: parent.verticalCenter
 
-                    Row {
-                        id: cpuChipRow
-                        anchors.centerIn: parent
-                        spacing: 4
+                        Behavior on color { ColorAnimation { duration: 600 } }
 
-                        Text {
-                            text: "CPU"
-                            color: root.theme.dim
-                            font.pixelSize: root.cfg_fontSize - 2
-                            font.weight: Font.Medium
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-                        Text {
-                            id: cpuTempText
-                            text: root.tempLabel(root.cpuTemp)
-                            color: root.tempColor(root.cpuTemp)
-                            font.pixelSize: root.cfg_fontSize
-                            font.weight: Font.Bold
-                            anchors.verticalCenter: parent.verticalCenter
-
-                            Behavior on color { ColorAnimation { duration: 600 } }
-
-                            Behavior on text {
-                                SequentialAnimation {
-                                    NumberAnimation { target: cpuTempText; property: "opacity"; to: 0.3; duration: 80 }
-                                    PropertyAction {}
-                                    NumberAnimation { target: cpuTempText; property: "opacity"; to: 1.0; duration: 120 }
-                                }
+                        Behavior on text {
+                            SequentialAnimation {
+                                NumberAnimation { target: cpuTempText; property: "opacity"; to: 0.3; duration: 80 }
+                                PropertyAction {}
+                                NumberAnimation { target: cpuTempText; property: "opacity"; to: 1.0; duration: 120 }
                             }
                         }
                     }
@@ -255,64 +252,60 @@ PlasmoidItem {
             }
 
             // ── GPU1 chip ────────────────────────────────────────────────
-            Item {
+            Rectangle {
+                id: gpu1Chip
                 visible:        root.cfg_showGpu1
-                implicitWidth:  gpu1Chip.implicitWidth
-                implicitHeight: compactRoot.chipH
+                width:          implicitWidth
+                height:         compactRoot.chipH
+                implicitWidth:  gpu1ChipRow.implicitWidth + compactRoot.chipPad * 2
+                radius:         height / 2
+                color: Qt.rgba(
+                    Qt.color(root.tempColor(root.gpu1Temp)).r,
+                    Qt.color(root.tempColor(root.gpu1Temp)).g,
+                    Qt.color(root.tempColor(root.gpu1Temp)).b,
+                    0.15)
+                border.color: root.tempColor(root.gpu1Temp)
+                border.width: 1
+
+                Behavior on border.color { ColorAnimation { duration: 600 } }
 
                 Rectangle {
-                    id: gpu1Chip
-                    height: compactRoot.chipH
-                    implicitWidth: gpu1ChipRow.implicitWidth + compactRoot.chipPad * 2
-                    radius: height / 2
-                    color: Qt.rgba(
-                        Qt.color(root.tempColor(root.gpu1Temp)).r,
-                        Qt.color(root.tempColor(root.gpu1Temp)).g,
-                        Qt.color(root.tempColor(root.gpu1Temp)).b,
-                        0.15)
+                    anchors.fill: parent
+                    radius: parent.radius
+                    color: "transparent"
                     border.color: root.tempColor(root.gpu1Temp)
-                    border.width: 1
-
+                    border.width: 3
+                    opacity: 0.15
                     Behavior on border.color { ColorAnimation { duration: 600 } }
+                }
 
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: parent.radius
-                        color: "transparent"
-                        border.color: root.tempColor(root.gpu1Temp)
-                        border.width: 3
-                        opacity: 0.15
-                        Behavior on border.color { ColorAnimation { duration: 600 } }
+                Row {
+                    id: gpu1ChipRow
+                    anchors.centerIn: parent
+                    spacing: 4
+
+                    Text {
+                        text: "GPU"
+                        color: root.theme.dim
+                        font.pixelSize: root.cfg_fontSize - 2
+                        font.weight: Font.Medium
+                        anchors.verticalCenter: parent.verticalCenter
                     }
+                    Text {
+                        id: gpu1TempText
+                        text: root.tempLabel(root.gpu1Temp)
+                        color: root.tempColor(root.gpu1Temp)
+                        font.pixelSize: root.cfg_fontSize
+                        font.weight: Font.Bold
+                        anchors.verticalCenter: parent.verticalCenter
 
-                    Row {
-                        id: gpu1ChipRow
-                        anchors.centerIn: parent
-                        spacing: 4
+                        Behavior on color { ColorAnimation { duration: 600 } }
 
-                        Text {
-                            text: "GPU"
-                            color: root.theme.dim
-                            font.pixelSize: root.cfg_fontSize - 2
-                            font.weight: Font.Medium
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-                        Text {
-                            id: gpu1TempText
-                            text: root.tempLabel(root.gpu1Temp)
-                            color: root.tempColor(root.gpu1Temp)
-                            font.pixelSize: root.cfg_fontSize
-                            font.weight: Font.Bold
-                            anchors.verticalCenter: parent.verticalCenter
-
-                            Behavior on color { ColorAnimation { duration: 600 } }
-
-                            Behavior on text {
-                                SequentialAnimation {
-                                    NumberAnimation { target: gpu1TempText; property: "opacity"; to: 0.3; duration: 80 }
-                                    PropertyAction {}
-                                    NumberAnimation { target: gpu1TempText; property: "opacity"; to: 1.0; duration: 120 }
-                                }
+                        Behavior on text {
+                            SequentialAnimation {
+                                NumberAnimation { target: gpu1TempText; property: "opacity"; to: 0.3; duration: 80 }
+                                PropertyAction {}
+                                NumberAnimation { target: gpu1TempText; property: "opacity"; to: 1.0; duration: 120 }
                             }
                         }
                     }
@@ -320,45 +313,41 @@ PlasmoidItem {
             }
 
             // ── GPU2 chip (iGPU — optional) ──────────────────────────────
-            Item {
+            Rectangle {
+                id: gpu2Chip
                 visible:        root.cfg_showGpu2 && root.gpu2Temp !== null
-                implicitWidth:  gpu2Chip.implicitWidth
-                implicitHeight: compactRoot.chipH
+                width:          implicitWidth
+                height:         compactRoot.chipH
+                implicitWidth:  gpu2ChipRow.implicitWidth + compactRoot.chipPad * 2
+                radius:         height / 2
+                color: Qt.rgba(
+                    Qt.color(root.tempColor(root.gpu2Temp)).r,
+                    Qt.color(root.tempColor(root.gpu2Temp)).g,
+                    Qt.color(root.tempColor(root.gpu2Temp)).b,
+                    0.15)
+                border.color: root.tempColor(root.gpu2Temp)
+                border.width: 1
 
-                Rectangle {
-                    id: gpu2Chip
-                    height: compactRoot.chipH
-                    implicitWidth: gpu2ChipRow.implicitWidth + compactRoot.chipPad * 2
-                    radius: height / 2
-                    color: Qt.rgba(
-                        Qt.color(root.tempColor(root.gpu2Temp)).r,
-                        Qt.color(root.tempColor(root.gpu2Temp)).g,
-                        Qt.color(root.tempColor(root.gpu2Temp)).b,
-                        0.15)
-                    border.color: root.tempColor(root.gpu2Temp)
-                    border.width: 1
+                Behavior on border.color { ColorAnimation { duration: 600 } }
 
-                    Behavior on border.color { ColorAnimation { duration: 600 } }
+                Row {
+                    id: gpu2ChipRow
+                    anchors.centerIn: parent
+                    spacing: 4
 
-                    Row {
-                        id: gpu2ChipRow
-                        anchors.centerIn: parent
-                        spacing: 4
-
-                        Text {
-                            text: "iGPU"
-                            color: root.theme.dim
-                            font.pixelSize: root.cfg_fontSize - 2
-                            font.weight: Font.Medium
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-                        Text {
-                            text: root.tempLabel(root.gpu2Temp)
-                            color: root.tempColor(root.gpu2Temp)
-                            font.pixelSize: root.cfg_fontSize
-                            font.weight: Font.Bold
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
+                    Text {
+                        text: "iGPU"
+                        color: root.theme.dim
+                        font.pixelSize: root.cfg_fontSize - 2
+                        font.weight: Font.Medium
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Text {
+                        text: root.tempLabel(root.gpu2Temp)
+                        color: root.tempColor(root.gpu2Temp)
+                        font.pixelSize: root.cfg_fontSize
+                        font.weight: Font.Bold
+                        anchors.verticalCenter: parent.verticalCenter
                     }
                 }
             }
