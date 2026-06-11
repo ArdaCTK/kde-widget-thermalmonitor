@@ -12,6 +12,13 @@ PlasmoidItem {
     preferredRepresentation: compactRepresentation
     Plasmoid.backgroundHints: "NoBackground"
 
+    implicitWidth: compactRepresentationItem ? compactRepresentationItem.implicitWidth : 120
+    implicitHeight: compactRepresentationItem ? compactRepresentationItem.implicitHeight : 32
+
+    Layout.minimumWidth: implicitWidth
+    Layout.preferredWidth: implicitWidth
+    Layout.maximumWidth: implicitWidth
+
     // ── settings ──────────────────────────────────────────────────────────
     property int    cfg_pollInterval:   Plasmoid.configuration.pollInterval
     property bool   cfg_showCpu:        Plasmoid.configuration.showCpu
@@ -156,7 +163,14 @@ PlasmoidItem {
         readonly property int gap: root.cfg_showGpu2 ? 4 : 6
 
         // ── Size hints for Plasma panel layout engine ─────────────────────
-        readonly property int contentWidth: chipRow.implicitWidth + 12
+        readonly property int cpuW:  root.cfg_showCpu ? (root.cfg_fontSize * 6 + 10) : 0
+        readonly property int gpu1W: root.cfg_showGpu1 ? (root.cfg_fontSize * 6 + 10) : 0
+        readonly property int gpu2W: (root.cfg_showGpu2 && root.gpu2Temp !== null) ? (root.cfg_fontSize * 6.5 + 10) : 0
+
+        readonly property int activeChips: (root.cfg_showCpu ? 1 : 0) + (root.cfg_showGpu1 ? 1 : 0) + ((root.cfg_showGpu2 && root.gpu2Temp !== null) ? 1 : 0)
+        readonly property int gaps: activeChips > 1 ? (activeChips - 1) * gap : 0
+
+        readonly property int contentWidth: cpuW + gpu1W + gpu2W + gaps + 12
 
         implicitWidth:         contentWidth
         implicitHeight:        parent ? parent.height : 32
@@ -193,9 +207,8 @@ PlasmoidItem {
             Rectangle {
                 id: cpuChip
                 visible:        root.cfg_showCpu
-                width:          implicitWidth
+                width:          compactRoot.cpuW
                 height:         compactRoot.chipH
-                implicitWidth:  cpuChipRow.implicitWidth + compactRoot.chipPad * 2
                 radius:         height / 2
                 color: Qt.rgba(
                     Qt.color(root.tempColor(root.cpuTemp)).r,
@@ -255,9 +268,8 @@ PlasmoidItem {
             Rectangle {
                 id: gpu1Chip
                 visible:        root.cfg_showGpu1
-                width:          implicitWidth
+                width:          compactRoot.gpu1W
                 height:         compactRoot.chipH
-                implicitWidth:  gpu1ChipRow.implicitWidth + compactRoot.chipPad * 2
                 radius:         height / 2
                 color: Qt.rgba(
                     Qt.color(root.tempColor(root.gpu1Temp)).r,
@@ -316,9 +328,8 @@ PlasmoidItem {
             Rectangle {
                 id: gpu2Chip
                 visible:        root.cfg_showGpu2 && root.gpu2Temp !== null
-                width:          implicitWidth
+                width:          compactRoot.gpu2W
                 height:         compactRoot.chipH
-                implicitWidth:  gpu2ChipRow.implicitWidth + compactRoot.chipPad * 2
                 radius:         height / 2
                 color: Qt.rgba(
                     Qt.color(root.tempColor(root.gpu2Temp)).r,
